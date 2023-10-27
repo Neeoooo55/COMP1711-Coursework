@@ -41,14 +41,14 @@ void tokeniseRecord(const char *input, const char *delimiter, char *date, char *
     free(inputCopy);
 }
 
-FILE *open_file(char *filename, char *mode)
-{
+FILE *open_file(char *filename, char *mode) {
     FILE *file = fopen(filename, mode);
-    if (file == NULL)
-    {
+
+    if (file == NULL) {
         printf("Error opening file\n");
         exit(1);
     }
+
     return file;
 }
 
