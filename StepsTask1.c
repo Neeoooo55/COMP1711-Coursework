@@ -10,9 +10,15 @@ typedef struct {
 } FITNESS_DATA;
 
 // Define any additional variables here
-
-FITNESS_DATA FITNESS_DATA_ARRAY[500];
 int count = 0;
+char delimiter = ',';
+char date[11];
+char dateArray[4] = {};
+char time[6];
+char timeArray[4] = {};
+char steps[10];
+int stepsArray[4] = {};
+// FITNESS_DATA fitness_data[4] = {};
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
@@ -61,11 +67,26 @@ int main() {
     char line_buffer[buffer_size];
 
     while (fgets(line_buffer, buffer_size, file) != NULL) {
-        printf("%s\n", line_buffer);
+        if (count < 3) {
+            tokeniseRecord(line_buffer, &delimiter, date, time, steps);
+            dateArray[count] = date;
+            timeArray[count] = time;
+            stepsArray[count] = atoi(steps);
+        }
         count += 1;
     }
 
     printf("Number of records in file: %d\n", count);
+
+    FITNESS_DATA fitness_data[4] = {
+        {dateArray[0], timeArray[0], stepsArray[0]},
+        {dateArray[1], timeArray[1], stepsArray[1]},
+        {dateArray[2], timeArray[2], stepsArray[2]},
+    };
+
+    for (int i = 0; i < 4; i++) {
+        printf("%s\n", dateArray[i]);
+    }
 
     fclose(file);
     return 0;
