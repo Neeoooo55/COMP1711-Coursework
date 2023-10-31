@@ -73,6 +73,7 @@ int main() {
             timeArray[count] = time;
             stepsArray[count] = atoi(steps);
         }
+        
         count += 1;
     }
 
