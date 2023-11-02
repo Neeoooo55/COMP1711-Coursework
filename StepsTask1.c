@@ -13,12 +13,9 @@ typedef struct {
 int count = 0;
 char delimiter = ',';
 char date[11];
-char dateArray[4] = {};
+char date_array[3] = {};
 char time[6];
-char timeArray[4] = {};
 char steps[10];
-int stepsArray[4] = {};
-// FITNESS_DATA fitness_data[4] = {};
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
@@ -67,28 +64,26 @@ int main() {
     char line_buffer[buffer_size];
 
     while (fgets(line_buffer, buffer_size, file) != NULL) {
-        if (count < 3) {
-            tokeniseRecord(line_buffer, &delimiter, date, time, steps);
-            dateArray[count] = date;
-            timeArray[count] = time;
-            stepsArray[count] = atoi(steps);
-        }
-        
         count += 1;
     }
 
     printf("Number of records in file: %d\n", count);
 
-    FITNESS_DATA fitness_data[4] = {
-        {dateArray[0], timeArray[0], stepsArray[0]},
-        {dateArray[1], timeArray[1], stepsArray[1]},
-        {dateArray[2], timeArray[2], stepsArray[2]},
-    };
+    fclose(file);
 
-    for (int i = 0; i < 4; i++) {
-        printf("%s\n", dateArray[i]);
+    count = 0;
+
+    FILE *file2 = open_file(filename, "r");
+
+    while (fgets(line_buffer, buffer_size, file2) != NULL) {
+        if (count < 3) {
+            tokeniseRecord(line_buffer, &delimiter, date, time, steps);
+            printf("%s/%s/%d\n", date, time, atoi(steps));
+        }
+
+        count += 1;
     }
 
-    fclose(file);
+    fclose(file2);
     return 0;
 }
