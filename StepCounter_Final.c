@@ -51,6 +51,8 @@ int main() {
     char choice;
     int count = 0;
     float mean = 0;
+    int pos = 0;
+    int steps_count = 0;
 
     while (1) {
         printf("Menu Options:\n");
@@ -89,58 +91,70 @@ int main() {
                 printf("File successfully loaded.\n");
             }
 
+            count = 0;
+
+            // Reads each line in the file
+            while (fgets(line_buffer, buffer_size, input) != NULL) {
+                // Using the tokeniseRecord function, we can split each line from the file into separate variables
+                tokeniseRecord(line_buffer, ",", date, time, steps);
+                // Now that each section (date, time and steps) are in there own variables, they can be added to the struct
+                // Using strcpy to assign a copy of the string into fitness_data_array and not a pointer to the string
+                strcpy(fitness_data_array[count].date, date);
+                strcpy(fitness_data_array[count].time, time);
+                fitness_data_array[count].steps = atoi(steps);
+
+                count++;
+            }
+
             fclose(input);
             break;
 
         case 'B':
         case 'b':
-            fopen(filename, "r");
-            // Set count to 0 so that everytime a new file is chosen,
-            // the count starts from the beginning.
-            count = 0;
-
-            // Reads each line in the file, then increments count
-            // if the lines is not blank.
-            while (fgets(line_buffer, buffer_size, input) != NULL) {
-                count += 1;
-            }   
-
             // Returns the total number of records then closes the file.
             printf("Total records: %d\n", count);
-
-            fclose(input);
             break;
 
         case 'C':
         case 'c':
-            return 0;
+            pos = 0;
+            steps_count = fitness_data_array[0].steps;
+
+            for (int i = 0; i < count; i++) {
+                if (fitness_data_array[i].steps < steps_count) {
+                    steps_count = fitness_data_array[i].steps;
+                    pos = i;
+                }
+            }
+
+            printf("Fewest Steps: %s %s\n", fitness_data_array[pos].date, fitness_data_array[pos].time);
             break;
 
         case 'D':
         case 'd':
-            return 0;
+            pos = 0;
+            steps_count = fitness_data_array[0].steps;
+
+            for (int i = 0; i < count; i++) {
+                if (fitness_data_array[i].steps > steps_count) {
+                    steps_count = fitness_data_array[i].steps;
+                    pos = i;
+                }
+            }
+
+            printf("Largest Steps: %s %s\n", fitness_data_array[pos].date, fitness_data_array[pos].time);
+            break;
             break;
 
         case 'E':
         case 'e':
-            fopen(filename, "r");
-            count = 0;
 
-            while (fgets(line_buffer, buffer_size, input) != NULL) {
-                // Using the tokeniseRecord function, we can split
-                // each line from the file into separate variables
-                tokeniseRecord(line_buffer, ",", date, time, steps);
-                
-                mean += atoi(steps);
-
-                // Increment count
-                count += 1;
+            for (int i = 0; i < count; i++) {
+                mean += fitness_data_array[i].steps;
             }
 
             mean /= count;
-            printf("Mean step count: %f\n", mean);
-
-            fclose(input);
+            printf("Mean step count: %.0f\n", mean);
             break;
 
         case 'F':
