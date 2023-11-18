@@ -52,7 +52,13 @@ int main() {
     int count = 0;
     float mean = 0;
     int pos = 0;
+    int end_pos = 0;
+    int max_count = 0;
+    int temp_count = 0;
     int steps_count = 0;
+
+    int longest_start = -1;
+    int longest_end = -1;
 
     while (1) {
         printf("Menu Options:\n");
@@ -159,7 +165,30 @@ int main() {
 
         case 'F':
         case 'f':
-            return 0;
+            pos = 0;
+            max_count = 0;
+            temp_count = 0;
+
+            for (int i = 0; i < count; i++) {
+                if (fitness_data_array[i].steps > 500) {
+                    if (temp_count == 0) {
+                        pos = i;
+                    }
+                    temp_count++;
+                    end_pos = i;
+                } else {
+                    if (temp_count > 0) {
+                        if (temp_count > longest_end - longest_start + 1) {
+                            longest_start = pos;
+                            longest_end = end_pos;
+                        }
+                        temp_count = 0;
+                    }
+                }
+            }
+
+            printf("Longest period start: %s %s\n", fitness_data_array[longest_start].date, fitness_data_array[longest_start].time);
+            printf("Longest period end: %s %s\n", fitness_data_array[longest_end].date, fitness_data_array[longest_end].time);
             break;
 
         case 'Q':
