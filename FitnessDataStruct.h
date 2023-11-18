@@ -11,6 +11,9 @@ typedef struct {
 	int steps;
 } FITNESS_DATA;
 
+// Define buffer so it can be used elsewhere
+#define buffer_size 100
+
 // Helper function prototypes
 void tokeniseRecord(const char *input, const char *delimiter, char *date, char *time, char *steps);
 

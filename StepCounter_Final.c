@@ -41,19 +41,12 @@ void tokeniseRecord(const char *input, const char *delimiter, char *date, char *
 int main() {
     // array of daily readings
     FITNESS_DATA fitness_data_array[100];
+    char date[11];
+    char time [6];
+    char steps[10];
 
-    int buffer_size = 100;
     char line_buffer[buffer_size];
     char filename[buffer_size];
-
-    // get filename from the user
-    // printf("Please enter the name of the data file: ");
-
-    // these lines read in a line from the stdin (where the user types)
-    // and then takes the actual string out of it
-    // this removes any spaces or newlines.
-    // fgets(line_buffer, buffer_size, stdin);
-    // sscanf(line_buffer, " %s ", filename);
 
     char choice;
     int count = 0;
@@ -63,47 +56,58 @@ int main() {
         printf("Menu Options:\n");
         printf("A: Specify the filename to be imported\n");                       
         printf("B: Display the total number of records in the file\n");                    
-        printf("C: Fint the date and time of the timeslot with the fewest steps\n");                 
+        printf("C: Find the date and time of the timeslot with the fewest steps\n");                 
         printf("D: Find the date and time of the timeslot with the largest number of steps\n");                    
         printf("E: Find the mean step count of all the records in the file\n");       
         printf("F: Find the longest continuous period where the step count is above 500 steps\n");                 
         printf("Q: Quit\n");
 
-        // get the next character typed in and store in the 'choice'
+        // Get the next character typed in and store in the 'choice'
         choice = getchar();
 
-        // this gets rid of the newline character which the user will enter
+        // This gets rid of the newline character which the user will enter
         // as otherwise this will stay in the stdin and be read next time
         while (getchar() != '\n');
 
-        // switch statement to control the menu.
+        // Switch statement to control the menu.
         switch (choice) {
-        // this allows for either capital or lower case
         case 'A':
         case 'a':
+            // Reads the filename inputed by the user then stores it in filename
             printf("Input filename: ");
             fgets(line_buffer, buffer_size, stdin);
             sscanf(line_buffer, " %s ", filename);
 
+            // Opens the file using fopen
             FILE *input = fopen(filename, "r");
+
+            // If there is an error opening the file, return an error message
             if (!input) {
                 printf("Error: Could not find or open the file\n");
                 return 1;
             } else {
-                printf("File successfullt loaded.\n");
+                printf("File successfully loaded.\n");
             }
 
+            fclose(input);
             break;
 
         case 'B':
         case 'b':
+            fopen(filename, "r");
+            // Set count to 0 so that everytime a new file is chosen,
+            // the count starts from the beginning.
             count = 0;
 
+            // Reads each line in the file, then increments count
+            // if the lines is not blank.
             while (fgets(line_buffer, buffer_size, input) != NULL) {
                 count += 1;
             }   
 
+            // Returns the total number of records then closes the file.
             printf("Total records: %d\n", count);
+
             fclose(input);
             break;
 
@@ -119,7 +123,24 @@ int main() {
 
         case 'E':
         case 'e':
-            return 0;
+            fopen(filename, "r");
+            count = 0;
+
+            while (fgets(line_buffer, buffer_size, input) != NULL) {
+                // Using the tokeniseRecord function, we can split
+                // each line from the file into separate variables
+                tokeniseRecord(line_buffer, ",", date, time, steps);
+                
+                mean += atoi(steps);
+
+                // Increment count
+                count += 1;
+            }
+
+            mean /= count;
+            printf("Mean step count: %f\n", mean);
+
+            fclose(input);
             break;
 
         case 'F':
