@@ -68,6 +68,7 @@ int main() {
         printf("E: Find the mean step count of all the records in the file\n");       
         printf("F: Find the longest continuous period where the step count is above 500 steps\n");                 
         printf("Q: Quit\n");
+        printf("Enter choice: ");
 
         // Get the next character typed in and store in the 'choice'
         choice = getchar();
@@ -141,7 +142,7 @@ int main() {
             }
 
             // Using pos print out the required information
-            printf("Fewest Steps: %s %s\n", fitness_data_array[pos].date, fitness_data_array[pos].time);
+            printf("Fewest steps: %s %s\n", fitness_data_array[pos].date, fitness_data_array[pos].time);
             break;
 
         case 'D':
@@ -162,7 +163,7 @@ int main() {
             }
 
             // Using pos print out the required information
-            printf("Largest Steps: %s %s\n", fitness_data_array[pos].date, fitness_data_array[pos].time);
+            printf("Largest steps: %s %s\n", fitness_data_array[pos].date, fitness_data_array[pos].time);
             break;
 
         case 'E':
