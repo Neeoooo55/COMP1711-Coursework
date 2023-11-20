@@ -8,7 +8,13 @@
 // Define any additional variables here
 
 // Global variables for filename and FITNESS_DATA array
+FITNESS_DATA fitness_data_array[100];
+char date[11];
+char time [6];
+char steps[10];
 
+char line_buffer[buffer_size];
+char filename[buffer_size];
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
@@ -39,26 +45,19 @@ void tokeniseRecord(const char *input, const char *delimiter, char *date, char *
 
 // Complete the main function
 int main() {
-    // array of daily readings
-    FITNESS_DATA fitness_data_array[100];
-    char date[11];
-    char time [6];
-    char steps[10];
-
-    char line_buffer[buffer_size];
-    char filename[buffer_size];
-
     char choice;
+
     int count = 0;
     float mean = 0;
+
     int pos = 0;
     int end_pos = 0;
     int max_count = 0;
     int temp_count = 0;
-    int steps_count = 0;
+    int start = 0;
+    int end = 0;
 
-    int longest_start = -1;
-    int longest_end = -1;
+    int steps_count = 0;
 
     while (1) {
         printf("Menu Options:\n");
@@ -91,12 +90,13 @@ int main() {
 
             // If there is an error opening the file, return an error message
             if (!input) {
-                printf("Error: Could not find or open the file\n");
+                printf("Error: Could not find or open the file.\n");
                 return 1;
             } else {
                 printf("File successfully loaded.\n");
             }
 
+            // Resets count
             count = 0;
 
             // Reads each line in the file
@@ -109,9 +109,11 @@ int main() {
                 strcpy(fitness_data_array[count].time, time);
                 fitness_data_array[count].steps = atoi(steps);
 
+                // Increment Count
                 count++;
             }
 
+            // Closes the file.
             fclose(input);
             break;
 
@@ -123,72 +125,96 @@ int main() {
 
         case 'C':
         case 'c':
+            // Resets pos
             pos = 0;
+            // Sets the initial step count to the first entry
             steps_count = fitness_data_array[0].steps;
 
+            // Loops through the rest of the entries
             for (int i = 0; i < count; i++) {
+                // If the step count of the current entry is lower than stored,
+                // replace steps_count and update pos.
                 if (fitness_data_array[i].steps < steps_count) {
                     steps_count = fitness_data_array[i].steps;
                     pos = i;
                 }
             }
 
+            // Using pos print out the required information
             printf("Fewest Steps: %s %s\n", fitness_data_array[pos].date, fitness_data_array[pos].time);
             break;
 
         case 'D':
         case 'd':
+            // Resets pos
             pos = 0;
+            // Sets the initial step count to the first entry
             steps_count = fitness_data_array[0].steps;
 
+            // Loops through the rest of the entries
             for (int i = 0; i < count; i++) {
+                // If the step count of the current entry is higher than stored,
+                // replace steps_count and update pos.
                 if (fitness_data_array[i].steps > steps_count) {
                     steps_count = fitness_data_array[i].steps;
                     pos = i;
                 }
             }
 
+            // Using pos print out the required information
             printf("Largest Steps: %s %s\n", fitness_data_array[pos].date, fitness_data_array[pos].time);
-            break;
             break;
 
         case 'E':
         case 'e':
-
+            
+            // Loops through the entries
             for (int i = 0; i < count; i++) {
+                // Add each entries step count to mean
                 mean += fitness_data_array[i].steps;
             }
 
+            // Once we have all the steps added up, divide by count to get the mean.
             mean /= count;
+            // Prints out the mean.
             printf("Mean step count: %.0f\n", mean);
             break;
 
         case 'F':
         case 'f':
+            // Resets variables
             pos = 0;
+            end_pos = 0;
             max_count = 0;
             temp_count = 0;
 
+            // Loops through all entries
             for (int i = 0; i < count; i++) {
+                // If the current steps is greater than 500, 
+                // increment the count and update the positions
                 if (fitness_data_array[i].steps > 500) {
                     if (temp_count == 0) {
                         pos = i;
                     }
                     temp_count++;
                     end_pos = i;
+                // If the current steps is less than 500,
                 } else {
-                    if (temp_count > 0) {
-                        if (temp_count > longest_end - longest_start + 1) {
-                            longest_start = pos;
-                            longest_end = end_pos;
-                        }
-                        temp_count = 0;
+                    // Update max_count if temp_count is greater,
+                    // then update start and end
+                    if (temp_count > max_count) {
+                        max_count = temp_count;
+                        start = pos;
+                        end = end_pos;
                     }
+                    // Reset temp_count;
+                    temp_count = 0;
                 }
             }
 
-            printf("Longest period start: %s %s\n", fitness_data_array[longest_start].date, fitness_data_array[longest_start].time);
-            printf("Longest period end: %s %s\n", fitness_data_array[longest_end].date, fitness_data_array[longest_end].time);
+            // Print out the results.
+            printf("Longest period start: %s %s\n", fitness_data_array[start].date, fitness_data_array[start].time);
+            printf("Longest period end: %s %s\n", fitness_data_array[end].date, fitness_data_array[end].time);
             break;
 
         case 'Q':
