@@ -11,13 +11,13 @@ typedef struct {
 
 // Global variables for filename and FITNESS_DATA array
 FitnessData fitness_data_array[100];
+FitnessData temp[1];
 char date[11];
 char time [6];
 char steps[10];
 
-const int buffer_size = 100;
-char line_buffer[buffer_size];
-char filename[buffer_size];
+char line_buffer[100];
+char filename[100];
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
@@ -49,7 +49,7 @@ void tokeniseRecord(const char *input, const char *delimiter, char *date, char *
 int main() {
     // Reads the filename inputed by the user then stores it
     printf("Enter filename: ");
-    fgets(line_buffer, buffer_size, stdin);
+    fgets(line_buffer, 100, stdin);
     sscanf(line_buffer, " %s ", filename);
 
     // Opens the file using fopen
@@ -65,7 +65,7 @@ int main() {
     int count = 0;
 
     // Reads each line in the file
-    while (fgets(line_buffer, buffer_size, input) != NULL) {
+    while (fgets(line_buffer, 100, input) != NULL) {
         // Using the tokeniseRecord function, we can split each line from the file into separate variables
         tokeniseRecord(line_buffer, ",", date, time, steps);
         // Now that each section (date, time and steps) are in there own variables, they can be added to the struct
@@ -86,10 +86,10 @@ int main() {
         int no_swap = 1;
 
         for (int j = 0; j <= count - (i + 1); j++) {
-            if (fitness_data_array[j].steps > fitness_data_array[j + 1].steps) {
-                char temp = fitness_data_array[j];
+            if (fitness_data_array[j].steps < fitness_data_array[j + 1].steps) {
+                temp[1] = fitness_data_array[j];
                 fitness_data_array[j] = fitness_data_array[j + 1];
-                fitness_data_array[j + 1] = temp;
+                fitness_data_array[j + 1] = temp[1];
                 no_swap = 0;
             }
         }
@@ -97,5 +97,9 @@ int main() {
         if (no_swap == 1) {
             break;
         }
+    }
+
+    for (int i = 0; i < count; i++) {
+        printf("%s/%s/%d\n", fitness_data_array[i].date, fitness_data_array[i].time, fitness_data_array[i].steps);
     }
 }

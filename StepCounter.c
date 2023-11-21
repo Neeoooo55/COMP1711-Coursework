@@ -135,7 +135,7 @@ int main() {
             for (int i = 0; i < count; i++) {
                 // If the step count of the current entry is lower than stored,
                 // replace steps_count and update pos.
-                if (fitness_data_array[i].steps < steps_count) {
+                if (fitness_data_array[i].steps <= steps_count) {
                     steps_count = fitness_data_array[i].steps;
                     pos = i;
                 }
@@ -156,7 +156,7 @@ int main() {
             for (int i = 0; i < count; i++) {
                 // If the step count of the current entry is higher than stored,
                 // replace steps_count and update pos.
-                if (fitness_data_array[i].steps > steps_count) {
+                if (fitness_data_array[i].steps >= steps_count) {
                     steps_count = fitness_data_array[i].steps;
                     pos = i;
                 }
