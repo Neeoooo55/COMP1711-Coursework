@@ -99,7 +99,22 @@ int main() {
         }
     }
 
-    for (int i = 0; i < count; i++) {
-        printf("%s/%s/%d\n", fitness_data_array[i].date, fitness_data_array[i].time, fitness_data_array[i].steps);
+    char outputfilename[strlen(filename) + 4];
+    strcpy(outputfilename, filename);
+    strcat(outputfilename, ".tsv");
+
+    FILE *file = fopen(outputfilename, "w");
+
+    if (file == NULL) {
+        printf("Error opening file\n");
+        exit(1);
     }
+
+    for (int i = 0; i < count; i++) {
+        fprintf(file, "%s\t%s\t%d\n",fitness_data_array[i].date, fitness_data_array[i].time, fitness_data_array[i].steps);
+    }
+
+    fclose(file);
+
+    printf("Data sorted and written to %s\n", outputfilename);
 }
