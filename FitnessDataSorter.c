@@ -85,7 +85,9 @@ int main() {
     for (int i = 0; i <= count - 1; i++) {
         int no_swap = 1;
 
+        // Loops through the data
         for (int j = 0; j <= count - (i + 1); j++) {
+            // If two items are in the wrong positions, swap them
             if (fitness_data_array[j].steps < fitness_data_array[j + 1].steps) {
                 temp[1] = fitness_data_array[j];
                 fitness_data_array[j] = fitness_data_array[j + 1];
@@ -94,27 +96,34 @@ int main() {
             }
         }
         
+        // If not swaps happened on the previous pass, break
         if (no_swap == 1) {
             break;
         }
     }
 
+    // Create a new variable for the tsv filename
     char outputfilename[strlen(filename) + 4];
     strcpy(outputfilename, filename);
     strcat(outputfilename, ".tsv");
 
+    // Create the new file using fopen and "w"
     FILE *file = fopen(outputfilename, "w");
 
+    // If there is an error, exit
     if (file == NULL) {
         printf("Error opening file\n");
         exit(1);
     }
 
+    // Print to the file in the tsv format
     for (int i = 0; i < count; i++) {
         fprintf(file, "%s\t%s\t%d\n",fitness_data_array[i].date, fitness_data_array[i].time, fitness_data_array[i].steps);
     }
 
+    // Close the file
     fclose(file);
 
+    //Output required info
     printf("Data sorted and written to %s\n", outputfilename);
 }
