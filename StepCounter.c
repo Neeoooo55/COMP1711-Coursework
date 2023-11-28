@@ -48,7 +48,7 @@ int main() {
     char choice;
 
     int count = 0;
-    float mean = 0;
+    int mean = 0;
 
     int pos = 0;
     int end_pos = 0;
@@ -168,19 +168,20 @@ int main() {
 
         case 'E':
         case 'e':
-            
+            // Resets Variables
+            steps_count = 0;
+            mean = 0;
             // Loops through the entries
             for (int i = 0; i < count; i++) {
                 // Add each entries step count to mean
-                mean += fitness_data_array[i].steps;
+                steps_count += fitness_data_array[i].steps;
             }
 
             // Once we have all the steps added up, divide by count to get the mean.
-            mean /= count;
+            mean = (steps_count + count / 2) / count;
             // Prints out the mean.
-            printf("Mean step count: %.0f\n", mean);
+            printf("Mean step count: %d\n", mean);
             break;
-
         case 'F':
         case 'f':
             // Resets variables
