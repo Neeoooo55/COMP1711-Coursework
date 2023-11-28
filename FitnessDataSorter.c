@@ -81,6 +81,22 @@ int main() {
     // Closes the file.
     fclose(input);
 
+    // To check if there are any gaps in the data
+    for (int i = 0; i < count; i++) {
+        // Checks if there is a bad date
+        if (!strcmp(fitness_data_array[i].date, "")) {
+            return 1;
+        }
+        // Checks if there is a bad time
+        if (!strcmp(fitness_data_array[i].time, "")) {
+            return 1;
+        }
+        // Checks if there are no steps
+        if (fitness_data_array[i].steps == 0) {
+            return 1;
+        }
+    }
+
     // Bubblesort to order the data by step count
     for (int i = 0; i <= count - 1; i++) {
         int no_swap = 1;

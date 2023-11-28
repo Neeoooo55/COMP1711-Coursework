@@ -150,13 +150,13 @@ int main() {
             // Resets pos
             pos = 0;
             // Sets the initial step count to the first entry
-            steps_count = fitness_data_array[0].steps;
+            steps_count = 0;
 
             // Loops through the rest of the entries
             for (int i = 0; i < count; i++) {
                 // If the step count of the current entry is higher than stored,
                 // replace steps_count and update pos.
-                if (fitness_data_array[i].steps >= steps_count) {
+                if (fitness_data_array[i].steps > steps_count) {
                     steps_count = fitness_data_array[i].steps;
                     pos = i;
                 }
