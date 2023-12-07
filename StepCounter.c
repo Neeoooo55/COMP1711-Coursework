@@ -149,7 +149,7 @@ int main() {
         case 'd':
             // Resets pos
             pos = 0;
-            // Sets the initial step count to the first entry
+            // Sets the initial step count to zero
             steps_count = 0;
 
             // Loops through the rest of the entries
