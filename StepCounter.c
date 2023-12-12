@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include "FitnessDataStruct.h"
@@ -8,9 +9,9 @@
 // Define any additional variables here
 
 // Global variables for filename and FITNESS_DATA array
-FITNESS_DATA fitness_data_array[100];
+FITNESS_DATA fitness_data_array[200];
 char date[11];
-char time [6];
+char time[10];
 char steps[10];
 
 char line_buffer[buffer_size];
@@ -48,8 +49,9 @@ int main() {
     char choice;
 
     int count = 0;
-    int mean = 0;
-
+    float mean = 0;
+    float rounded_mean = 0;
+    
     int pos = 0;
     int end_pos = 0;
     int max_count = 0;
@@ -178,9 +180,11 @@ int main() {
             }
 
             // Once we have all the steps added up, divide by count to get the mean.
-            mean = (steps_count + count / 2) / count;
+            mean = (float)steps_count / (float)count;
+            // Rounds the mean using round().
+            rounded_mean = round(mean);
             // Prints out the mean.
-            printf("Mean step count: %d\n", mean);
+            printf("Mean step count: %.f\n", rounded_mean);
             break;
         case 'F':
         case 'f':
